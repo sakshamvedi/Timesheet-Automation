@@ -24,7 +24,6 @@ function setupEventListeners() {
 async function exportTimesheet() {
     const { activities = [] } = await chrome.storage.local.get('activities');
 
-    // Group activities by day
     const groupedActivities = activities.reduce((acc, activity) => {
         const date = new Date(activity.timestamp).toLocaleDateString();
         if (!acc[date]) acc[date] = [];
@@ -32,7 +31,7 @@ async function exportTimesheet() {
         return acc;
     }, {});
 
-    // Create CSV content
+
     let csv = 'Date,Time,Duration (minutes),Description\n';
 
     Object.entries(groupedActivities).forEach(([date, activities]) => {
@@ -41,7 +40,7 @@ async function exportTimesheet() {
         });
     });
 
-    // Download CSV
+
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
